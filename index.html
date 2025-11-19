@@ -272,6 +272,48 @@
             width: 30px;
         }
 
+        .settings-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .settings-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .settings-btn.save {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .settings-btn.load {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .settings-btn:active {
+            transform: scale(0.95);
+        }
+
+        .settings-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .settings-message {
+            font-size: 11px;
+            color: #11998e;
+            margin-top: 8px;
+            min-height: 16px;
+        }
+
         .install-prompt {
             display: none;
             margin-top: 15px;
@@ -361,6 +403,11 @@
                 <input type="number" id="fadeEndTime" class="setting-input" value="25" min="0" max="60">
                 <span class="setting-unit">sec</span>
             </div>
+            <div class="settings-buttons">
+                <button class="settings-btn save" id="saveSettings">Salva</button>
+                <button class="settings-btn load" id="loadSettings">Carica</button>
+            </div>
+            <div class="settings-message" id="settingsMessage"></div>
         </div>
 
         <div class="install-prompt" id="installPrompt">
@@ -387,9 +434,66 @@
         const fadeEndTimeInput = document.getElementById('fadeEndTime');
         const installPrompt = document.getElementById('installPrompt');
         const volumeDebug = document.getElementById('volumeDebug');
+        const saveSettingsBtn = document.getElementById('saveSettings');
+        const loadSettingsBtn = document.getElementById('loadSettings');
+        const settingsMessage = document.getElementById('settingsMessage');
 
         let isPlaying = false;
         let deferredPrompt = null;
+
+        // Save settings to localStorage
+        function saveSettings() {
+            const settings = {
+                volumeIncrement: volumeIncrementInput.value,
+                fadeStartTime: fadeTimeInput.value,
+                fadeEndTime: fadeEndTimeInput.value
+            };
+            localStorage.setItem('innoPlayerSettings', JSON.stringify(settings));
+            showMessage('Impostazioni salvate');
+        }
+
+        // Load settings from localStorage
+        function loadSettings() {
+            const saved = localStorage.getItem('innoPlayerSettings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                volumeIncrementInput.value = settings.volumeIncrement || 100;
+                fadeTimeInput.value = settings.fadeStartTime || 35;
+                fadeEndTimeInput.value = settings.fadeEndTime || 25;
+                showMessage('Impostazioni caricate');
+
+                // Update base volume with new settings
+                const maxIncrement = parseFloat(volumeIncrementInput.value) || 100;
+                const baseVolume = 1.0 / (1 + maxIncrement / 100);
+                audio.volume = baseVolume;
+                updateVolumeMeter(100, baseVolume);
+            } else {
+                showMessage('Nessuna impostazione salvata');
+            }
+        }
+
+        // Show temporary message
+        function showMessage(text) {
+            settingsMessage.textContent = text;
+            setTimeout(() => {
+                settingsMessage.textContent = '';
+            }, 2000);
+        }
+
+        // Auto-load settings on page load
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('innoPlayerSettings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                volumeIncrementInput.value = settings.volumeIncrement || 100;
+                fadeTimeInput.value = settings.fadeStartTime || 35;
+                fadeEndTimeInput.value = settings.fadeEndTime || 25;
+            }
+        });
+
+        // Button event listeners
+        saveSettingsBtn.addEventListener('click', saveSettings);
+        loadSettingsBtn.addEventListener('click', loadSettings);
 
         // Play/Pause button
         playButton.addEventListener('click', function() {
