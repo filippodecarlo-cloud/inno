@@ -1,11 +1,11 @@
 const CACHE_NAME = 'inno-player-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/inno.mp3',
-  '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png'
+  './',
+  './index.html',
+  './inno.mp3',
+  './manifest.json',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 // Install service worker and cache files
