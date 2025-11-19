@@ -397,7 +397,10 @@
         // Restart button
         restartButton.addEventListener('click', function() {
             audio.currentTime = 0;
-            audio.volume = 1.0;
+            // Reset to base volume
+            const maxIncrement = parseFloat(volumeIncrementInput.value) || 80;
+            const baseVolume = 1.0 / (1 + maxIncrement / 100);
+            audio.volume = baseVolume;
             updateVolumeMeter(100);
 
             if (!isPlaying) {
@@ -438,6 +441,10 @@
 
         audio.addEventListener('loadedmetadata', function() {
             console.log('Durata audio:', audio.duration, 'secondi');
+            // Set initial base volume
+            const maxIncrement = parseFloat(volumeIncrementInput.value) || 80;
+            const baseVolume = 1.0 / (1 + maxIncrement / 100);
+            audio.volume = baseVolume;
         });
 
         audio.addEventListener('timeupdate', function() {
@@ -453,21 +460,25 @@
             const timeRemaining = duration - currentTime;
 
             // Get settings values
-            const fadeTime = parseFloat(fadeTimeInput.value) || 10;
-            const maxIncrement = parseFloat(volumeIncrementInput.value) || 50;
+            const fadeTime = parseFloat(fadeTimeInput.value) || 30;
+            const maxIncrement = parseFloat(volumeIncrementInput.value) || 80;
+
+            // Calculate base volume so that increment reaches 1.0
+            // e.g., 80% increment: baseVolume = 1.0 / 1.8 = 0.556
+            const baseVolume = 1.0 / (1 + maxIncrement / 100);
 
             // Volume fade in final seconds
             if (timeRemaining <= fadeTime && timeRemaining > 0) {
                 const fadeProgress = 1 - (timeRemaining / fadeTime);
-                const volumeBoost = 1.0 + (fadeProgress * (maxIncrement / 100));
+                // Increase from baseVolume to 1.0
+                const currentVolume = baseVolume + (fadeProgress * (1.0 - baseVolume));
+                audio.volume = currentVolume;
 
-                // Note: HTML5 audio volume max is 1.0, but we show the intended percentage
-                audio.volume = Math.min(1.0, 1.0); // Keep at max
-
-                const displayPercentage = volumeBoost * 100;
+                // Display percentage relative to base (100% at start, up to 100+increment at end)
+                const displayPercentage = (currentVolume / baseVolume) * 100;
                 updateVolumeMeter(displayPercentage);
             } else {
-                audio.volume = 1.0;
+                audio.volume = baseVolume;
                 if (timeRemaining > fadeTime) {
                     updateVolumeMeter(100);
                 }
@@ -488,7 +499,10 @@
             status.textContent = 'Completato - Premi per ricominciare';
             progressBar.style.width = '0%';
             audio.currentTime = 0;
-            audio.volume = 1.0;
+            // Reset to base volume
+            const maxIncrement = parseFloat(volumeIncrementInput.value) || 80;
+            const baseVolume = 1.0 / (1 + maxIncrement / 100);
+            audio.volume = baseVolume;
             updateVolumeMeter(100);
         });
 
