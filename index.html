@@ -42,8 +42,43 @@
 
         h1 {
             color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-size: 24px;
+        }
+
+        .track-info {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border-left: 4px solid #764ba2;
+        }
+
+        .track-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .track-subtitle {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .track-artist {
+            font-size: 11px;
+            color: #888;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .track-description {
+            font-size: 11px;
+            color: #764ba2;
+            font-weight: 500;
+            line-height: 1.4;
         }
 
         .controls-row {
@@ -266,6 +301,13 @@
 <body>
     <div class="container">
         <h1>Riproduttore Inno</h1>
+
+        <div class="track-info">
+            <p class="track-title">Academic Festival Overture, Op. 80</p>
+            <p class="track-subtitle">Maestoso (parte finale)</p>
+            <p class="track-artist">Berliner Philharmoniker dir. Claudio Abbado</p>
+            <p class="track-description">Inno dell'Università degli Studi di Firenze<br>per la proclamazione delle lauree</p>
+        </div>
 
         <div class="controls-row">
             <button id="restartButton" title="Ricomincia da capo">↺</button>
