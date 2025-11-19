@@ -212,6 +212,12 @@
             color: #764ba2;
         }
 
+        .volume-debug {
+            font-size: 10px;
+            color: #999;
+            margin-top: 5px;
+        }
+
         .settings-section {
             margin-top: 20px;
             padding: 15px;
@@ -335,6 +341,7 @@
                 <div class="volume-bar active"></div>
             </div>
             <div class="volume-percentage" id="volumePercentage">100%</div>
+            <div class="volume-debug" id="volumeDebug">Vol. reale: 56%</div>
         </div>
 
         <div class="settings-section">
@@ -373,6 +380,7 @@
         const volumeIncrementInput = document.getElementById('volumeIncrement');
         const fadeTimeInput = document.getElementById('fadeTime');
         const installPrompt = document.getElementById('installPrompt');
+        const volumeDebug = document.getElementById('volumeDebug');
 
         let isPlaying = false;
         let deferredPrompt = null;
@@ -401,7 +409,7 @@
             const maxIncrement = parseFloat(volumeIncrementInput.value) || 80;
             const baseVolume = 1.0 / (1 + maxIncrement / 100);
             audio.volume = baseVolume;
-            updateVolumeMeter(100);
+            updateVolumeMeter(100, baseVolume);
 
             if (!isPlaying) {
                 audio.play();
@@ -424,9 +432,9 @@
         });
 
         // Update volume meter visual
-        function updateVolumeMeter(percentage) {
+        function updateVolumeMeter(percentage, realVolume) {
             const bars = volumeMeter.querySelectorAll('.volume-bar');
-            const activeBars = Math.round((percentage / 150) * 10); // Scale to 150% max
+            const activeBars = Math.round((percentage / 180) * 10); // Scale to 180% max
 
             bars.forEach((bar, index) => {
                 if (index < activeBars) {
@@ -437,6 +445,9 @@
             });
 
             volumePercentage.textContent = `${Math.round(percentage)}%`;
+            if (realVolume !== undefined) {
+                volumeDebug.textContent = `Vol. reale: ${Math.round(realVolume * 100)}%`;
+            }
         }
 
         audio.addEventListener('loadedmetadata', function() {
@@ -445,6 +456,7 @@
             const maxIncrement = parseFloat(volumeIncrementInput.value) || 80;
             const baseVolume = 1.0 / (1 + maxIncrement / 100);
             audio.volume = baseVolume;
+            updateVolumeMeter(100, baseVolume);
         });
 
         audio.addEventListener('timeupdate', function() {
@@ -476,11 +488,11 @@
 
                 // Display percentage relative to base (100% at start, up to 100+increment at end)
                 const displayPercentage = (currentVolume / baseVolume) * 100;
-                updateVolumeMeter(displayPercentage);
+                updateVolumeMeter(displayPercentage, currentVolume);
             } else {
                 audio.volume = baseVolume;
                 if (timeRemaining > fadeTime) {
-                    updateVolumeMeter(100);
+                    updateVolumeMeter(100, baseVolume);
                 }
             }
 
@@ -503,7 +515,7 @@
             const maxIncrement = parseFloat(volumeIncrementInput.value) || 80;
             const baseVolume = 1.0 / (1 + maxIncrement / 100);
             audio.volume = baseVolume;
-            updateVolumeMeter(100);
+            updateVolumeMeter(100, baseVolume);
         });
 
         audio.addEventListener('error', function(e) {
