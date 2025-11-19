@@ -348,17 +348,17 @@
             <div class="settings-title">Impostazioni Volume</div>
             <div class="setting-row">
                 <span class="setting-label">Incremento massimo</span>
-                <input type="number" id="volumeIncrement" class="setting-input" value="80" min="0" max="100">
+                <input type="number" id="volumeIncrement" class="setting-input" value="100" min="0" max="100">
                 <span class="setting-unit">%</span>
             </div>
             <div class="setting-row">
                 <span class="setting-label">Inizio incremento</span>
-                <input type="number" id="fadeTime" class="setting-input" value="30" min="1" max="60">
+                <input type="number" id="fadeTime" class="setting-input" value="35" min="1" max="60">
                 <span class="setting-unit">sec</span>
             </div>
             <div class="setting-row">
                 <span class="setting-label">Fine incremento</span>
-                <input type="number" id="fadeEndTime" class="setting-input" value="0" min="0" max="60">
+                <input type="number" id="fadeEndTime" class="setting-input" value="25" min="0" max="60">
                 <span class="setting-unit">sec</span>
             </div>
         </div>
@@ -412,7 +412,7 @@
         restartButton.addEventListener('click', function() {
             audio.currentTime = 0;
             // Reset to base volume
-            const maxIncrement = parseFloat(volumeIncrementInput.value) || 80;
+            const maxIncrement = parseFloat(volumeIncrementInput.value) || 100;
             const baseVolume = 1.0 / (1 + maxIncrement / 100);
             audio.volume = baseVolume;
             updateVolumeMeter(100, baseVolume);
@@ -459,7 +459,7 @@
         audio.addEventListener('loadedmetadata', function() {
             console.log('Durata audio:', audio.duration, 'secondi');
             // Set initial base volume
-            const maxIncrement = parseFloat(volumeIncrementInput.value) || 80;
+            const maxIncrement = parseFloat(volumeIncrementInput.value) || 100;
             const baseVolume = 1.0 / (1 + maxIncrement / 100);
             audio.volume = baseVolume;
             updateVolumeMeter(100, baseVolume);
@@ -478,9 +478,9 @@
             const timeRemaining = duration - currentTime;
 
             // Get settings values
-            const fadeStartTime = parseFloat(fadeTimeInput.value) || 30;
-            const fadeEndTime = parseFloat(fadeEndTimeInput.value) || 0;
-            const maxIncrement = parseFloat(volumeIncrementInput.value) || 80;
+            const fadeStartTime = parseFloat(fadeTimeInput.value) || 35;
+            const fadeEndTime = parseFloat(fadeEndTimeInput.value) || 25;
+            const maxIncrement = parseFloat(volumeIncrementInput.value) || 100;
 
             // Calculate base volume so that increment reaches 1.0
             // e.g., 80% increment: baseVolume = 1.0 / 1.8 = 0.556
@@ -524,7 +524,7 @@
             progressBar.style.width = '0%';
             audio.currentTime = 0;
             // Reset to base volume
-            const maxIncrement = parseFloat(volumeIncrementInput.value) || 80;
+            const maxIncrement = parseFloat(volumeIncrementInput.value) || 100;
             const baseVolume = 1.0 / (1 + maxIncrement / 100);
             audio.volume = baseVolume;
             updateVolumeMeter(100, baseVolume);
