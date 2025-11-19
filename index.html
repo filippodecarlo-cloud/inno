@@ -352,8 +352,13 @@
                 <span class="setting-unit">%</span>
             </div>
             <div class="setting-row">
-                <span class="setting-label">Tempo finale</span>
+                <span class="setting-label">Inizio incremento</span>
                 <input type="number" id="fadeTime" class="setting-input" value="30" min="1" max="60">
+                <span class="setting-unit">sec</span>
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">Fine incremento</span>
+                <input type="number" id="fadeEndTime" class="setting-input" value="0" min="0" max="60">
                 <span class="setting-unit">sec</span>
             </div>
         </div>
@@ -379,6 +384,7 @@
         const volumePercentage = document.getElementById('volumePercentage');
         const volumeIncrementInput = document.getElementById('volumeIncrement');
         const fadeTimeInput = document.getElementById('fadeTime');
+        const fadeEndTimeInput = document.getElementById('fadeEndTime');
         const installPrompt = document.getElementById('installPrompt');
         const volumeDebug = document.getElementById('volumeDebug');
 
@@ -472,16 +478,18 @@
             const timeRemaining = duration - currentTime;
 
             // Get settings values
-            const fadeTime = parseFloat(fadeTimeInput.value) || 30;
+            const fadeStartTime = parseFloat(fadeTimeInput.value) || 30;
+            const fadeEndTime = parseFloat(fadeEndTimeInput.value) || 0;
             const maxIncrement = parseFloat(volumeIncrementInput.value) || 80;
 
             // Calculate base volume so that increment reaches 1.0
             // e.g., 80% increment: baseVolume = 1.0 / 1.8 = 0.556
             const baseVolume = 1.0 / (1 + maxIncrement / 100);
+            const fadeDuration = fadeStartTime - fadeEndTime;
 
             // Volume fade in final seconds
-            if (timeRemaining <= fadeTime && timeRemaining > 0) {
-                const fadeProgress = 1 - (timeRemaining / fadeTime);
+            if (timeRemaining <= fadeStartTime && timeRemaining > fadeEndTime && fadeDuration > 0) {
+                const fadeProgress = 1 - ((timeRemaining - fadeEndTime) / fadeDuration);
                 // Increase from baseVolume to 1.0
                 const currentVolume = baseVolume + (fadeProgress * (1.0 - baseVolume));
                 audio.volume = currentVolume;
@@ -489,9 +497,13 @@
                 // Display percentage relative to base (100% at start, up to 100+increment at end)
                 const displayPercentage = (currentVolume / baseVolume) * 100;
                 updateVolumeMeter(displayPercentage, currentVolume);
+            } else if (timeRemaining <= fadeEndTime) {
+                // After fade end, keep at max volume
+                audio.volume = 1.0;
+                updateVolumeMeter(100 + maxIncrement, 1.0);
             } else {
                 audio.volume = baseVolume;
-                if (timeRemaining > fadeTime) {
+                if (timeRemaining > fadeStartTime) {
                     updateVolumeMeter(100, baseVolume);
                 }
             }
