@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -33,22 +34,24 @@
         .container {
             background: white;
             border-radius: 20px;
-            padding: 30px 25px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 20px 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
             text-align: center;
-            max-width: 400px;
+            max-width: 380px;
             width: 100%;
+            position: relative;
+            /* For absolute settings btn */
         }
 
         h1 {
             color: #333;
-            margin-bottom: 15px;
-            font-size: 24px;
+            margin-bottom: 10px;
+            font-size: 20px;
         }
 
         .track-info {
-            margin-bottom: 15px;
-            padding: 12px;
+            margin-bottom: 10px;
+            padding: 10px;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             border-radius: 10px;
             border-left: 4px solid #764ba2;
@@ -112,6 +115,25 @@
 
         #playButton.playing {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        #playButton.waiting {
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         #restartButton {
@@ -195,16 +217,45 @@
             background: linear-gradient(180deg, #f5576c 0%, #f093fb 50%, #667eea 100%);
         }
 
-        .volume-bar:nth-child(1) { height: 20%; }
-        .volume-bar:nth-child(2) { height: 30%; }
-        .volume-bar:nth-child(3) { height: 40%; }
-        .volume-bar:nth-child(4) { height: 50%; }
-        .volume-bar:nth-child(5) { height: 60%; }
-        .volume-bar:nth-child(6) { height: 70%; }
-        .volume-bar:nth-child(7) { height: 80%; }
-        .volume-bar:nth-child(8) { height: 90%; }
-        .volume-bar:nth-child(9) { height: 95%; }
-        .volume-bar:nth-child(10) { height: 100%; }
+        .volume-bar:nth-child(1) {
+            height: 20%;
+        }
+
+        .volume-bar:nth-child(2) {
+            height: 30%;
+        }
+
+        .volume-bar:nth-child(3) {
+            height: 40%;
+        }
+
+        .volume-bar:nth-child(4) {
+            height: 50%;
+        }
+
+        .volume-bar:nth-child(5) {
+            height: 60%;
+        }
+
+        .volume-bar:nth-child(6) {
+            height: 70%;
+        }
+
+        .volume-bar:nth-child(7) {
+            height: 80%;
+        }
+
+        .volume-bar:nth-child(8) {
+            height: 90%;
+        }
+
+        .volume-bar:nth-child(9) {
+            height: 95%;
+        }
+
+        .volume-bar:nth-child(10) {
+            height: 100%;
+        }
 
         .volume-percentage {
             font-size: 24px;
@@ -219,16 +270,15 @@
         }
 
         .settings-section {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 12px;
+            margin-top: 10px;
+            padding: 0;
+            background: none;
         }
 
         .settings-title {
             font-size: 14px;
             color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-weight: 600;
         }
 
@@ -270,6 +320,43 @@
             color: #999;
             margin-left: 5px;
             width: 30px;
+        }
+
+        /* Compact Settings Logic */
+        .toggle-settings-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #999;
+            z-index: 10;
+        }
+
+        .settings-content {
+            display: none;
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .settings-content.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .settings-buttons {
@@ -329,6 +416,15 @@
             display: block;
         }
 
+        .logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
         @media (max-width: 360px) {
             .container {
                 padding: 20px 15px;
@@ -339,22 +435,33 @@
             }
 
             #playButton {
-                width: 80px;
-                height: 80px;
-                font-size: 32px;
+                width: 70px;
+                height: 70px;
+                font-size: 28px;
             }
+        }
+
+        #visualizer {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
+        <img src="Logo_universita_firenze.png" alt="Logo Università di Firenze" class="logo">
         <h1>Riproduttore Inno</h1>
 
         <div class="track-info">
             <p class="track-title">Academic Festival Overture, Op. 80</p>
             <p class="track-subtitle">Maestoso (parte finale)</p>
             <p class="track-artist">Berliner Philharmoniker dir. Claudio Abbado</p>
-            <p class="track-description">Inno dell'Università degli Studi di Firenze<br>per la proclamazione delle lauree</p>
+            <p class="track-description">Inno dell'Università degli Studi di Firenze<br>per la proclamazione delle
+                lauree</p>
         </div>
 
         <div class="controls-row">
@@ -386,28 +493,39 @@
             <div class="volume-debug" id="volumeDebug">Vol. reale: 56%</div>
         </div>
 
+        <canvas id="visualizer" width="300" height="40"></canvas>
+
+        <button id="toggleSettings" class="toggle-settings-btn" title="Impostazioni">⚙️</button>
+
         <div class="settings-section">
-            <div class="settings-title">Impostazioni Volume</div>
-            <div class="setting-row">
-                <span class="setting-label">Incremento massimo</span>
-                <input type="number" id="volumeIncrement" class="setting-input" value="100" min="0" max="100">
-                <span class="setting-unit">%</span>
+            <div id="settingsContent" class="settings-content">
+                <div class="settings-title">Impostazioni Volume</div>
+                <div class="setting-row">
+                    <span class="setting-label">Incremento massimo</span>
+                    <input type="number" id="volumeIncrement" class="setting-input" value="100" min="0" max="100">
+                    <span class="setting-unit">%</span>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-label">Inizio incremento</span>
+                    <input type="number" id="fadeTime" class="setting-input" value="35" min="1" max="60">
+                    <span class="setting-unit">sec</span>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-label">Fine incremento</span>
+                    <input type="number" id="fadeEndTime" class="setting-input" value="25" min="0" max="60">
+                    <span class="setting-unit">sec</span>
+                </div>
+                <div class="setting-row">
+                    <span class="setting-label">Ritardo avvio</span>
+                    <input type="number" id="startDelay" class="setting-input" value="3" min="0" max="60">
+                    <span class="setting-unit">sec</span>
+                </div>
+                <div class="settings-buttons">
+                    <button class="settings-btn save" id="saveSettings">Salva</button>
+                    <button class="settings-btn load" id="loadSettings">Carica</button>
+                </div>
+                <div class="settings-message" id="settingsMessage"></div>
             </div>
-            <div class="setting-row">
-                <span class="setting-label">Inizio incremento</span>
-                <input type="number" id="fadeTime" class="setting-input" value="35" min="1" max="60">
-                <span class="setting-unit">sec</span>
-            </div>
-            <div class="setting-row">
-                <span class="setting-label">Fine incremento</span>
-                <input type="number" id="fadeEndTime" class="setting-input" value="25" min="0" max="60">
-                <span class="setting-unit">sec</span>
-            </div>
-            <div class="settings-buttons">
-                <button class="settings-btn save" id="saveSettings">Salva</button>
-                <button class="settings-btn load" id="loadSettings">Carica</button>
-            </div>
-            <div class="settings-message" id="settingsMessage"></div>
         </div>
 
         <div class="install-prompt" id="installPrompt">
@@ -432,21 +550,133 @@
         const volumeIncrementInput = document.getElementById('volumeIncrement');
         const fadeTimeInput = document.getElementById('fadeTime');
         const fadeEndTimeInput = document.getElementById('fadeEndTime');
+        const startDelayInput = document.getElementById('startDelay');
         const installPrompt = document.getElementById('installPrompt');
         const volumeDebug = document.getElementById('volumeDebug');
         const saveSettingsBtn = document.getElementById('saveSettings');
         const loadSettingsBtn = document.getElementById('loadSettings');
         const settingsMessage = document.getElementById('settingsMessage');
+        const toggleSettingsBtn = document.getElementById('toggleSettings');
+        const settingsContent = document.getElementById('settingsContent');
 
         let isPlaying = false;
+        let isWaiting = false;
+        let delayTimer = null;
         let deferredPrompt = null;
+        let wakeLock = null;
+
+        // Audio Context & Visualizer
+        let audioContext = null;
+        let analyser = null;
+        let pcmData = null;
+        let sourceNode = null;
+
+        // Wake Lock Function
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('Wake Lock attivato');
+                    wakeLock.addEventListener('release', () => {
+                        console.log('Wake Lock rilasciato');
+                    });
+                }
+            } catch (err) {
+                console.error(`${err.name}, ${err.message}`);
+            }
+        }
+
+        async function releaseWakeLock() {
+            if (wakeLock !== null) {
+                await wakeLock.release();
+                wakeLock = null;
+            }
+        }
+
+        // Handle visibility change
+        document.addEventListener('visibilitychange', async () => {
+            if (wakeLock !== null && document.visibilityState === 'visible') {
+                await requestWakeLock();
+            }
+        });
+
+        // Initialize Audio Context (user interaction required)
+        function initAudioContext() {
+            // Check if running locally via file:// protocol
+            if (window.location.protocol === 'file:') {
+                console.warn('Visualizer disabilitato su protocollo file:// per preservare l\'audio.');
+                const canvas = document.getElementById('visualizer');
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#666';
+                ctx.font = '12px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Visualizer non disponibile in locale', canvas.width / 2, canvas.height / 2 + 4);
+                return;
+            }
+
+            if (!audioContext) {
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    analyser = audioContext.createAnalyser();
+                    analyser.fftSize = 64; // Small size for simple bars
+
+                    // Allow CORS for audio if possible (helps on some servers)
+                    audio.crossOrigin = "anonymous";
+
+                    sourceNode = audioContext.createMediaElementSource(audio);
+                    sourceNode.connect(analyser);
+                    analyser.connect(audioContext.destination);
+
+                    pcmData = new Uint8Array(analyser.frequencyBinCount);
+                    drawVisualizer();
+                } catch (e) {
+                    console.error('Errore AudioContext:', e);
+                }
+            } else if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+        }
+
+        function drawVisualizer() {
+            if (!analyser) return;
+
+            requestAnimationFrame(drawVisualizer);
+            analyser.getByteFrequencyData(pcmData);
+
+            const canvas = document.getElementById('visualizer');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            const barWidth = (width / pcmData.length) * 2.5;
+            let x = 0;
+
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = 0; i < pcmData.length; i++) {
+                const barHeight = (pcmData[i] / 255) * height;
+
+                // Dynamic Gradient
+                const gradient = ctx.createLinearGradient(0, height, 0, height - barHeight);
+                gradient.addColorStop(0, '#667eea');
+                gradient.addColorStop(1, '#764ba2');
+
+                ctx.fillStyle = gradient;
+                // Draw rounded bars
+                ctx.beginPath();
+                ctx.roundRect(x, height - barHeight, barWidth - 2, barHeight, 3);
+                ctx.fill();
+
+                x += barWidth;
+            }
+        }
 
         // Save settings to localStorage
         function saveSettings() {
             const settings = {
                 volumeIncrement: volumeIncrementInput.value,
                 fadeStartTime: fadeTimeInput.value,
-                fadeEndTime: fadeEndTimeInput.value
+                fadeEndTime: fadeEndTimeInput.value,
+                startDelay: startDelayInput.value
             };
             localStorage.setItem('innoPlayerSettings', JSON.stringify(settings));
             showMessage('Impostazioni salvate');
@@ -460,6 +690,7 @@
                 volumeIncrementInput.value = settings.volumeIncrement || 100;
                 fadeTimeInput.value = settings.fadeStartTime || 35;
                 fadeEndTimeInput.value = settings.fadeEndTime || 25;
+                startDelayInput.value = (settings.startDelay !== undefined) ? settings.startDelay : 3;
                 showMessage('Impostazioni caricate');
 
                 // Update base volume with new settings
@@ -488,6 +719,7 @@
                 volumeIncrementInput.value = settings.volumeIncrement || 100;
                 fadeTimeInput.value = settings.fadeStartTime || 35;
                 fadeEndTimeInput.value = settings.fadeEndTime || 25;
+                startDelayInput.value = (settings.startDelay !== undefined) ? settings.startDelay : 3;
             }
         });
 
@@ -495,25 +727,104 @@
         saveSettingsBtn.addEventListener('click', saveSettings);
         loadSettingsBtn.addEventListener('click', loadSettings);
 
+        toggleSettingsBtn.addEventListener('click', () => {
+            settingsContent.classList.toggle('show');
+            // Scroll to settings if opening
+            if (settingsContent.classList.contains('show')) {
+                setTimeout(() => {
+                    settingsContent.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            }
+        });
+
         // Play/Pause button
-        playButton.addEventListener('click', function() {
-            if (!isPlaying) {
-                audio.play();
-                isPlaying = true;
-                playButton.textContent = '⏸';
-                playButton.classList.add('playing');
-                status.textContent = 'In riproduzione...';
-            } else {
+        playButton.addEventListener('click', function () {
+            // Caso 1: In attesa -> Annulla
+            if (isWaiting) {
+                clearTimeout(delayTimer);
+                isWaiting = false;
+                playButton.textContent = '▶';
+                playButton.classList.remove('waiting');
+                status.textContent = 'Avvio annullato';
+                return;
+            }
+
+            // Caso 2: In riproduzione -> Pausa
+            if (isPlaying) {
                 audio.pause();
                 isPlaying = false;
                 playButton.textContent = '▶';
                 playButton.classList.remove('playing');
                 status.textContent = 'In pausa';
+                releaseWakeLock(); // Release lock on pause
+                return;
+            }
+
+            // Caso 3: Fermo -> Avvia (con o senza ritardo)
+            const delaySeconds = parseInt(startDelayInput.value) || 0;
+
+            if (delaySeconds > 0) {
+                startCountdown(delaySeconds);
+            } else {
+                startPlayback();
             }
         });
 
+        function startCountdown(seconds) {
+            initAudioContext(); // Pre-init audio context on click
+            requestWakeLock();  // Lock screen during countdown
+
+            isWaiting = true;
+            playButton.classList.add('waiting');
+            playButton.textContent = '⏳';
+
+            let remaining = seconds;
+            status.textContent = `Avvio tra ${remaining} secondi...`;
+
+            function tick() {
+                remaining--;
+                if (remaining > 0) {
+                    status.textContent = `Avvio tra ${remaining} secondi...`;
+                    delayTimer = setTimeout(tick, 1000);
+                } else {
+                    startPlayback();
+                }
+            }
+
+            delayTimer = setTimeout(tick, 1000);
+        }
+
+        function startPlayback() {
+            initAudioContext(); // Ensure audio context is ready
+            requestWakeLock();  // Lock screen
+
+            isWaiting = false;
+            isPlaying = true;
+
+            playButton.classList.remove('waiting');
+            playButton.classList.add('playing');
+            playButton.textContent = '⏸';
+            status.textContent = 'In riproduzione...';
+
+            audio.play().catch(e => {
+                console.error("Autoplay bloccato o errore:", e);
+                status.textContent = "Errore avvio audio";
+                isPlaying = false;
+                playButton.classList.remove('playing');
+                playButton.textContent = '▶';
+            });
+        }
+
         // Restart button
-        restartButton.addEventListener('click', function() {
+        restartButton.addEventListener('click', function () {
+            // Se c'è un countdown in corso, annullalo
+            if (isWaiting) {
+                clearTimeout(delayTimer);
+                isWaiting = false;
+                playButton.classList.remove('waiting');
+                releaseWakeLock();
+            }
+
             audio.currentTime = 0;
             // Reset to base volume
             const maxIncrement = parseFloat(volumeIncrementInput.value) || 100;
@@ -532,7 +843,7 @@
         });
 
         // Click on progress bar to seek
-        progressContainer.addEventListener('click', function(e) {
+        progressContainer.addEventListener('click', function (e) {
             const rect = progressContainer.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
             const width = rect.width;
@@ -560,7 +871,7 @@
             }
         }
 
-        audio.addEventListener('loadedmetadata', function() {
+        audio.addEventListener('loadedmetadata', function () {
             console.log('Durata audio:', audio.duration, 'secondi');
             // Set initial base volume
             const maxIncrement = parseFloat(volumeIncrementInput.value) || 100;
@@ -569,7 +880,7 @@
             updateVolumeMeter(100, baseVolume);
         });
 
-        audio.addEventListener('timeupdate', function() {
+        audio.addEventListener('timeupdate', function () {
             const currentTime = audio.currentTime;
             const duration = audio.duration;
 
@@ -620,8 +931,9 @@
             }
         });
 
-        audio.addEventListener('ended', function() {
+        audio.addEventListener('ended', function () {
             isPlaying = false;
+            releaseWakeLock(); // Release lock on end
             playButton.textContent = '▶';
             playButton.classList.remove('playing');
             status.textContent = 'Completato - Premi per ricominciare';
@@ -634,7 +946,7 @@
             updateVolumeMeter(100, baseVolume);
         });
 
-        audio.addEventListener('error', function(e) {
+        audio.addEventListener('error', function (e) {
             status.textContent = 'Errore nel caricamento del file';
             console.error('Errore audio:', e);
         });
@@ -673,4 +985,5 @@
         }
     </script>
 </body>
+
 </html>

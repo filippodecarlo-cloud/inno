@@ -4,6 +4,7 @@ const urlsToCache = [
   './index.html',
   './inno.mp3',
   './manifest.json',
+  './Logo_universita_firenze.png',
   './icon-192.png',
   './icon-512.png'
 ];
